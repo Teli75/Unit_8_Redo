@@ -41,7 +41,7 @@ app.use(function(err, req, res, next) {
 });
 
 (async () => {
-  await sequelize.sync({ force: true });
+  //await sequelize.sync({ force: true });
   try {
     //await sequelize.authenticate();
     console.log("Connection to the database successful!");
