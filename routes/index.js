@@ -10,7 +10,8 @@ function asyncHandler(cb) {
       await cb(req, res, next);
     } catch (error) {
       console.log("server error");
-      res.status(500).send(error);
+      //res.status(500).send(error);
+      next();
     }
   };
 }
@@ -43,10 +44,26 @@ router.get(
 );
 
 // /* POST /books/new - Posts a new book to the database */
+// router.post('/books/new', asyncHandler(async (req, res) => {
+//   console.log("request Body: ", req.body);
+//   const book = await Book.create( req.body );
+//   res.redirect("/Books");
+// }));
+
+/* POST create article. */
 router.post('/books/new', asyncHandler(async (req, res) => {
-  console.log("request Body: ", req.body);
-  const book = await Book.create( req.body );
-  res.redirect("/Books");
+  let book;
+  try {
+    book = await Book.create(req.body);
+    res.redirect("/books" + book.id);
+  } catch (error) {
+    if(error.name === "SequelizeValidationError") {
+      book = await Book.build(req.body);
+      res.render('/books/new', { book, errors: error.errors })
+    } else {
+      throw error;
+    }  
+  }
 }));
 
 /* GET /books/:id - Shows book detail form */
