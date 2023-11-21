@@ -3,7 +3,7 @@ head
   title A Brief History of Time
   link(href='stylesheets/style.css' rel='stylesheet' )
 h1 Update Book
-form
+form(action=`/books/${book.id}` method='post')
   p
     label(for='title') Title
     input#title(name='title' type='text' value='The Hunger Games')
@@ -20,6 +20,6 @@ form
     input(type='submit' value='Update Book')
 form(method='post' action='/books/8/delete' onsubmit="return confirm('Do you really want to delete this book?');")
   p
-    a.button(href='all_books.html') Cancel
+    a.button(href='/books') Cancel
   p
     input(type='submit' value='Delete Book')

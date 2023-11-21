@@ -26,7 +26,7 @@ router.get(
   })
 );
 
-/* Shows the create new book form */
+/* GET /books/new - Shows the create new book form */
 router.get(
   "/books/new",
   asyncHandler(async (req, res) => {
@@ -42,13 +42,13 @@ router.post('/books/new', asyncHandler(async (req, res) => {
   res.redirect("/Books");
 }));
 
-// /*get /books/:id - Shows book detail form */
-// router.get("/books/:id", async function (req, res, next) {
-//   console.log("handling GET req for /books/:id");
+/*get /books/:id - Shows book detail form */
+router.get("/books/:id", async function (req, res, next) {
+  console.log("handling GET req for /books/:id");
 
-//     const book = await Book.findByPk(req.params.id);
-//       res.render("update-book", { Book });
-//     });
+    const book = await Book.findByPk(req.params.id);
+      res.render("update-book", { book: book } );
+    });
 
 // /* post /books/:id - Updates book info in the database */
 
