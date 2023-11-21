@@ -15,6 +15,7 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
 app.use(logger("dev"));
+//Provide access to the request body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -24,7 +25,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 
 (async () => {
-  //await sequelize.sync({ force: true });
   try {
     //await sequelize.authenticate();
     console.log("Connection to the database successful!");
