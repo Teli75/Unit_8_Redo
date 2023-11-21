@@ -31,12 +31,14 @@ router.get(
   "/books/new",
   asyncHandler(async (req, res) => {
     console.log("Handling GET request for /books/new");
-    res.render("new-book");
+    res.render("new-book", { book: {} } );
   })
 );
 
-// /* post /books/new - Posts a new book to the database */
-router.post('/', asyncHandler(async (req, res) => {
+// /* POST /books/new - Posts a new book to the database */
+router.post('/books/new', asyncHandler(async (req, res) => {
+  console.log("request Body: ", req.body);
+  const book = await Book.create( req.body );
   res.redirect("/Books");
 }));
 
