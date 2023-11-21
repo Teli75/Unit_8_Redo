@@ -21,7 +21,6 @@ router.get(
   asyncHandler(async (req, res, next) => {
     console.log("Handling GET request for /books");
     const allBooks = await Book.findAll();
-    console.log(allBooks.map((book) => book.toJSON()));
     res.render("layout", { allBooks });
   })
 );
@@ -44,12 +43,16 @@ router.post('/books/new', asyncHandler(async (req, res) => {
 
 /*get /books/:id - Shows book detail form */
 router.get("/books/:id", async function (req, res, next) {
-  console.log("handling GET req for /books/:id");
     const book = await Book.findByPk(req.params.id);
-    console.log(book);
+    //console.log(book);
       res.render("update-book", { book: book } );
     });
 
 // /* post /books/:id - Updates book info in the database */
+router.post("/books/:id", async function (req, res, next) {
+  const book = await Book.findByPk(req.params.id);
+  await book.update( req.body );
+  res.redirect("/Books");
+});
 
 module.exports = router;
