@@ -17,6 +17,14 @@ function asyncHandler(cb) {
 
 /* GET home page. */
 router.get(
+  "/",
+  asyncHandler(async (req, res, next) => {
+    res.redirect("/books");
+  })
+);
+
+/* GET Books Page. */
+router.get(
   "/books",
   asyncHandler(async (req, res, next) => {
     console.log("Handling GET request for /books");
@@ -41,18 +49,26 @@ router.post('/books/new', asyncHandler(async (req, res) => {
   res.redirect("/Books");
 }));
 
-/*get /books/:id - Shows book detail form */
-router.get("/books/:id", async function (req, res, next) {
+/* GET /books/:id - Shows book detail form */
+router.get("/books/:id", asyncHandler(async (req, res) => {
     const book = await Book.findByPk(req.params.id);
     //console.log(book);
       res.render("update-book", { book: book } );
-    });
+    }));
 
-// /* post /books/:id - Updates book info in the database */
-router.post("/books/:id", async function (req, res, next) {
+/* POST /books/:id - Updates book info in the database */
+router.post("/books/:id", asyncHandler(async (req, res) => {
   const book = await Book.findByPk(req.params.id);
   await book.update( req.body );
   res.redirect("/Books");
-});
+}));
+
+/* GET -  Deletes a book */
+router.post("/books/:id/delete", asyncHandler(async (req, res) => {
+  console.log("Entering post route");
+  const book = await Book.findByPk(req.params.id);
+  await book.destroy( req.body );
+  res.redirect("/Books");
+}));
 
 module.exports = router;
