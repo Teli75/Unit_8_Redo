@@ -30,7 +30,7 @@ router.get(
   asyncHandler(async (req, res, next) => {
     console.log("Handling GET request for /books");
     const allBooks = await Book.findAll();
-    res.render("layout", { allBooks });
+    res.render("index", { allBooks });
   })
 );
 
@@ -50,12 +50,12 @@ router.get(
 //   res.redirect("/Books");
 // }));
 
-/* POST create article. */
+/* POST create book */
 router.post('/books/new', asyncHandler(async (req, res) => {
   let book;
   try {
     book = await Book.create(req.body);
-    res.redirect("/books" + book.id);
+    res.redirect("/books/" + book.id);
   } catch (error) {
     if(error.name === "SequelizeValidationError") {
       book = await Book.build(req.body);
