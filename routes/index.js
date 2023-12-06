@@ -1,6 +1,6 @@
 var express = require("express");
 var router = express.Router();
-//This seemed to work without .Book at the end
+
 const { Book } = require("../models/index.js");
 
 /* Handler function to wrap each route */
