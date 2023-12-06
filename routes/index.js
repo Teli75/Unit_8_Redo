@@ -29,6 +29,7 @@ router.get(
   asyncHandler(async (req, res, next) => {
     console.log("Handling GET request for /books");
     const allBooks = await Book.findAll();
+    //console.log(allBooks);
     res.render("index", { allBooks });
   })
 );

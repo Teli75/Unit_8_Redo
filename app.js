@@ -3,10 +3,10 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const { sequelize } = require("./models/index");
+//const { sequelize } = require("./models/index");
 
 var indexRouter = require("./routes/index");
-var usersRouter = require("./routes/users");
+//var usersRouter = require("./routes/users");
 
 var app = express();
 
@@ -22,7 +22,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
-app.use("/users", usersRouter);
+//app.use("/users", usersRouter);
 
 (async () => {
   try {
@@ -34,7 +34,6 @@ app.use("/users", usersRouter);
 })();
 
 app.use((req, res, next) => {
-//app.get("/test-404", (req, res, next) => {
   console.log("I'm sorry, but this page is not found");
   const err = new Error("Not Found");
   err.status = 404;

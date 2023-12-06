@@ -1,24 +1,26 @@
+extends layout
+
+block head 
+  title Books
 
 block content
+  h1 Books
+  p
+    a.button(href='books/new') Create New Book
 
-head
-  title Books
-  link(href='/stylesheets/style.css' rel='stylesheet')
-h1 Books
-p
-  a.button(href='books/new') Create New Book
-table
-  thead
-    tr
-      th Title
-      th Author
-      th Genre
-      th Year
-  tbody
-    each book in allBooks
+  table
+    thead
       tr
-        td
-          a(href=`/books/${ book.id }`) #{ book.title }
-        td #{ book.author }
-        td #{ book.genre }
-        td #{ book.year }
+        th Title
+        th Author
+        th Genre
+        th Year
+
+    tbody
+      each book in allBooks
+        tr
+          td
+            a(href=`/books/${ book.id }`) #{ book.title }
+          td #{ book.author }
+          td #{ book.genre }
+          td #{ book.year }
