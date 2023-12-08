@@ -49,7 +49,7 @@ router.post(
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
         console.log(error);
-        //let newBook = await Book.build(req.body);
+        let newBook = await Book.build(req.body);
         res.render("new-book", { newBook, errors: error.errors });
       } else {
         throw error;
@@ -81,6 +81,7 @@ router.post(
     let book;
       book = await Book.findByPk(req.params.id);
       
+      //throw new Error("Simulated database error");
 
       if (book) {
         await book.update(req.body);
