@@ -1,7 +1,6 @@
 var express = require("express");
 var router = express.Router();
-
-const { Book } = require("../models/index.js");
+const Book = require("../models").Book;
 
 /* Handler function to wrap each route */
 function asyncHandler(cb) {
@@ -9,7 +8,6 @@ function asyncHandler(cb) {
     try {
       await cb(req, res, next);
     } catch (error) {
-      console.log("server error");
       next();
     }
   };
@@ -27,9 +25,7 @@ router.get(
 router.get(
   "/books",
   asyncHandler(async (req, res, next) => {
-    console.log("Handling GET request for /books");
     const allBooks = await Book.findAll();
-    //console.log(allBooks);
     res.render("index", { allBooks });
   })
 );
@@ -38,7 +34,6 @@ router.get(
 router.get(
   "/books/new",
   asyncHandler(async (req, res) => {
-    console.log("Handling GET request for /books/new");
     res.render("new-book", { book: {} });
   })
 );
@@ -50,13 +45,12 @@ router.post(
     let book;
     try {
       book = await Book.create(req.body);
-      res.redirect("/books/");
+      res.redirect("/books");
     } catch (error) {
       if (error.name === "SequelizeValidationError") {
         console.log(error);
-        book = await Book.build(req.body);
-        book.id = req.params.id;
-        res.render("new-book", { book, errors: error.errors });
+        //let newBook = await Book.build(req.body);
+        res.render("new-book", { newBook, errors: error.errors });
       } else {
         throw error;
       }
@@ -72,7 +66,6 @@ router.get(
     if (book) {
       res.render("update-book", { book: book });
     } else {
-      //This generates an error that is sent to middlwware
       next();
     }
   })
@@ -82,20 +75,28 @@ router.get(
 router.post(
   "/books/:id",
   asyncHandler(async (req, res) => {
-    let book;
+    
     try {
+      console.log('entered try block');
+    let book;
       book = await Book.findByPk(req.params.id);
-      await book.update(req.body);
+      
 
       if (book) {
+        await book.update(req.body);
         res.redirect("/books");
       } else {
+        console.log("entered else block");
         res.sendStatus(404);
+        
+        throw error;
       }
     } catch (error) {
+      console.log("did it work?");
       if (error.name === "SequelizeValidationError") {
         console.log(error);
         book = await Book.build(req.body);
+        book.id = req.params.id;
         res.render("update-book", { book, errors: error.errors });
       } else {
         throw error;
@@ -108,23 +109,12 @@ router.post(
 router.post(
   "/books/:id/delete",
   asyncHandler(async (req, res) => {
-    let book;
-    try {
-      book = await Book.findByPk(req.params.id);
-      if (book) {
-        await book.destroy(req.body);
-        res.redirect("/books");
-      } else {
-        res.sendStatus(404);
-      }
-    } catch (error) {
-      if (error.name === "SequelizeValidationError") {
-        console.log(error);
-        book = await Book.build(req.body);
-        res.render("update-book", { book, errors: error.errors });
-      } else {
-        throw error;
-      }
+    const book = await Book.findByPk(req.params.id);
+    if (book) {
+      await book.destroy(req.body);
+      res.redirect("/books");
+    } else {
+      res.sendStatus(404);
     }
   })
 );
